@@ -4,7 +4,11 @@ import {readFile, writeFile} from "node:fs/promises";
 import {Country} from "@/lib/types/Country";
 
 export async function getCountries(): Promise<Country[]> {
-  const response = await fetch("https://date.nager.at/api/v3/AvailableCountries");
+  const response = await fetch("https://date.nager.at/api/v3/AvailableCountries", {
+    next: {
+      revalidate: 60,
+    },
+  });
 
   if (!response.ok) {
     throw new Error("nager.date fetch Error");
