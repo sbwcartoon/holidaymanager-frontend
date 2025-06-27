@@ -61,6 +61,7 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
               selectedMonthFrom={from}
               selectedMonthTo={to}
               countryCode={countryCode}
+              types={types}
             />
           </div>
         </div>

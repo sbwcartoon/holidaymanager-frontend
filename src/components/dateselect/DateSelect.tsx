@@ -11,9 +11,10 @@ interface Props {
   selectedMonthFrom: number;
   selectedMonthTo: number;
   countryCode: string;
+  types: string[];
 }
 
-export function DateSelect({selectedYear, selectedMonthFrom, selectedMonthTo, countryCode}: Props) {
+export function DateSelect({selectedYear, selectedMonthFrom, selectedMonthTo, countryCode, types}: Props) {
   const router = useRouter();
 
   const [year, setYear] = useState<number>(selectedYear);
@@ -36,10 +37,11 @@ export function DateSelect({selectedYear, selectedMonthFrom, selectedMonthTo, co
   };
 
   const handleChange = (year: number, from: number, to: number) => {
-    const params = new URLSearchParams({
-      from: String(from),
-      to: String(to),
-    });
+    const params = new URLSearchParams();
+    params.set("from", String(from));
+    params.set("to", String(to));
+    types.forEach((type) => params.append("types", type))
+
     router.push(`/holidays/${year}/${countryCode}?${params.toString()}`);
   }
 
