@@ -6,6 +6,8 @@ import {DeleteHolidaysButton} from "@/components/DeleteHolidaysButton";
 import {ResyncHolidaysButton} from "@/components/ResyncHolidaysButton";
 import {DateSelect} from "@/components/dateselect/DateSelect";
 import {CursoredButton} from "@/components/CursoredButton";
+import {getAllTypes} from "@/lib/utils";
+import {HolidayTypeToggles} from "@/components/HolidayTypeToggles";
 
 interface Props {
   params: {
@@ -13,10 +15,11 @@ interface Props {
     countryCode: string;
   };
   searchParams: {
-    page?: string;
-    size?: string;
-    from?: string;
-    to?: string;
+    page?: number;
+    size?: number;
+    from?: number;
+    to?: number;
+    types?: string | string[];
   };
 }
 
@@ -24,13 +27,15 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
   const countryCode = params.countryCode;
   const year = Number(params.year);
 
-  const page = Number(searchParams.page) || 1;
-  const size = Number(searchParams.size) || 10;
-  const from = Number(searchParams.from) || 1;
-  const to = Number(searchParams.to) || 12;
+  const page: number = Number(searchParams.page) || 1;
+  const size: number = Number(searchParams.size) || 10;
+  const from: number = Number(searchParams.from) || 1;
+  const to: number = Number(searchParams.to) || 12;
+  const typesParam: string | string[] = searchParams.types ?? getAllTypes();
+  const types: string[] = typeof typesParam === "string" ? [typesParam] : typesParam;
 
   const country = (await getCountries()).find((c) => c.countryCode === countryCode);
-  const pageResponse = await getHolidays(year, countryCode, page, size, from, to);
+  const pageResponse = await getHolidays(year, countryCode, page, size, from, to, types);
 
   const holidays: CountryHoliday[] = pageResponse.content;
   const totalPages: number = pageResponse.totalPages;
@@ -43,20 +48,27 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
     <>
       <h1 className="text-2xl font-bold py-5">{country.name} Holidays 🥰</h1>
 
-      <div className="flex justify-between items-center py-3">
-        <Link href="/">
-          <CursoredButton className="cursor-pointer" variant="secondary">Back to Home</CursoredButton>
-        </Link>
-        <div className="flex gap-2">
-          {holidays.length > 0 ? <DeleteHolidaysButton year={year} countryCode={countryCode}/> : null}
-          <ResyncHolidaysButton year={year} countryCode={countryCode}/>
-          <DateSelect
-            selectedYear={year}
-            selectedMonthFrom={from}
-            selectedMonthTo={to}
-            countryCode={countryCode}
-          />
+      <div className="py-4 space-y-2.5">
+        <div className="flex justify-between items-center">
+          <Link href="/">
+            <CursoredButton className="cursor-pointer" variant="secondary">Back to Home</CursoredButton>
+          </Link>
+          <div className="flex gap-2">
+            {holidays.length > 0 ? <DeleteHolidaysButton year={year} countryCode={countryCode}/> : null}
+            <ResyncHolidaysButton year={year} countryCode={countryCode}/>
+            <DateSelect
+              selectedYear={year}
+              selectedMonthFrom={from}
+              selectedMonthTo={to}
+              countryCode={countryCode}
+            />
+          </div>
         </div>
+        <HolidayTypeToggles
+          from={from}
+          to={to}
+          types={types}
+        />
       </div>
 
       <ul className="bg-muted p-4 rounded-lg shadow divide-y">
@@ -69,7 +81,7 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
 
       <nav className="flex justify-center py-5 space-x-1">
         {Array.from({length: totalPages}, (_, i) => (
-          <Link href={`/holidays/${year}/${countryCode}?page=${i + 1}&size=${size}&from=${from}&to=${to}`} key={i}>
+          <Link href={`/holidays/${year}/${countryCode}?page=${i + 1}&size=${size}&from=${from}&to=${to}${types.map((type: string) => `&types=${type}`).join("")}`} key={i}>
             <CursoredButton
               size="sm"
               variant={page === i + 1 ? "secondary" : "ghost"}
