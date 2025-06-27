@@ -2,7 +2,7 @@ import {HolidayType} from "@/lib/types/HolidayType";
 
 export interface CountryHoliday {
   countryCode: string;
-  date: Date;
+  date: string;
   localName: string;
   name: string;
   global: boolean;

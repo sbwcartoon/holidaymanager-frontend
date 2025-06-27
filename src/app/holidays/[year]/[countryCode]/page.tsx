@@ -6,20 +6,35 @@ import {DeleteHolidaysButton} from "@/components/DeleteHolidaysButton";
 import {ResyncHolidaysButton} from "@/components/ResyncHolidaysButton";
 import {YearSelect} from "@/components/YearSelect";
 import {CursoredButton} from "@/components/CursoredButton";
+import {Button} from "@/components/ui/button";
 
 interface Props {
   params: {
-    year: string,
-    countryCode: string
+    year: string;
+    countryCode: string;
+  };
+  searchParams: {
+    page?: string;
+    size?: string;
+    from?: string;
+    to?: string;
   };
 }
 
-export default async function CountryHolidaysPage({params}: Props) {
+export default async function CountryHolidaysPage({params, searchParams}: Props) {
   const countryCode = params.countryCode;
   const year = Number(params.year);
 
+  const page = Number(searchParams.page) || 1;
+  const size = Number(searchParams.size) || 10;
+  const from = Number(searchParams.from) || 1;
+  const to = Number(searchParams.to) || 12;
+
   const country = (await getCountries()).find((c) => c.countryCode === countryCode);
-  const holidays = await getHolidays(year, countryCode);
+  const pageResponse = await getHolidays(year, countryCode, page, size, from, to);
+
+  const holidays: CountryHoliday[] = pageResponse.content;
+  const totalPages: number = pageResponse.totalPages;
 
   if (!country) {
     return <p className="text-center py-16">Invalid country code</p>;
@@ -50,6 +65,17 @@ export default async function CountryHolidaysPage({params}: Props) {
           <p className="text-center py-16">데이터가 존재하지 않습니다.<br/>Resync 버튼을 누르면 데이터가 생길지도..?</p>
         )}
       </ul>
+
+      <nav className="flex justify-center py-5 space-x-1">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <Link href={`/holidays/${year}/${countryCode}?page=${i + 1}&size=${size}&from=${from}&to=${to}`} key={i}>
+            <CursoredButton
+              size="sm"
+              variant={page === i + 1 ? "secondary" : "ghost"}
+            >{i + 1}</CursoredButton>
+          </Link>
+        ))}
+      </nav>
     </>
   );
 }
