@@ -1,29 +1,21 @@
-"use client";
-
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {getRecent5Years} from "@/lib/dateutils";
-import {useRouter} from "next/navigation";
 
 interface Props {
-  selectedYear: number;
-  countryCode: string;
+  year: number;
+  onChange: (year: number) => void;
 }
 
-export function YearSelect({selectedYear, countryCode}: Props) {
-  const router = useRouter();
+export function YearSelect({year, onChange}: Props) {
   const yearOptions = getRecent5Years();
-
-  const handleYearChange = (year: string) => {
-    router.push(`/holidays/${year}/${countryCode}`);
-  };
 
   return (
     <Select
-      defaultValue={String(selectedYear)}
-      onValueChange={handleYearChange}
+      defaultValue={String(year)}
+      onValueChange={(value) => onChange(Number(value))}
     >
-      <SelectTrigger className="cursor-pointer w-[180px]">
-        <SelectValue />
+      <SelectTrigger className="cursor-pointer w-[110px]">
+        <SelectValue/>
       </SelectTrigger>
       <SelectContent>
         {yearOptions.map((yearOption: number) => (
@@ -32,7 +24,7 @@ export function YearSelect({selectedYear, countryCode}: Props) {
             value={String(yearOption)}
             key={yearOption}
           >
-            {yearOption}
+            {yearOption}년
           </SelectItem>
         ))}
       </SelectContent>

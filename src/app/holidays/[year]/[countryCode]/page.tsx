@@ -4,9 +4,8 @@ import Link from "next/link";
 import {CountryHoliday} from "@/lib/types/CountryHoliday";
 import {DeleteHolidaysButton} from "@/components/DeleteHolidaysButton";
 import {ResyncHolidaysButton} from "@/components/ResyncHolidaysButton";
-import {YearSelect} from "@/components/YearSelect";
+import {DateSelect} from "@/components/dateselect/DateSelect";
 import {CursoredButton} from "@/components/CursoredButton";
-import {Button} from "@/components/ui/button";
 
 interface Props {
   params: {
@@ -51,8 +50,10 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
         <div className="flex gap-2">
           {holidays.length > 0 ? <DeleteHolidaysButton year={year} countryCode={countryCode}/> : null}
           <ResyncHolidaysButton year={year} countryCode={countryCode}/>
-          <YearSelect
+          <DateSelect
             selectedYear={year}
+            selectedMonthFrom={from}
+            selectedMonthTo={to}
             countryCode={countryCode}
           />
         </div>
@@ -67,7 +68,7 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
       </ul>
 
       <nav className="flex justify-center py-5 space-x-1">
-        {Array.from({ length: totalPages }, (_, i) => (
+        {Array.from({length: totalPages}, (_, i) => (
           <Link href={`/holidays/${year}/${countryCode}?page=${i + 1}&size=${size}&from=${from}&to=${to}`} key={i}>
             <CursoredButton
               size="sm"
