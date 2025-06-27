@@ -2,6 +2,7 @@ import path from "path";
 import {CountryHoliday} from "@/lib/types/CountryHoliday";
 import {readFile, writeFile} from "node:fs/promises";
 import {Country} from "@/lib/types/Country";
+import {HttpError} from "@/lib/exception/HttpError";
 
 export async function getCountries(): Promise<Country[]> {
   const response = await fetch("https://date.nager.at/api/v3/AvailableCountries", {
@@ -11,7 +12,7 @@ export async function getCountries(): Promise<Country[]> {
   });
 
   if (!response.ok) {
-    throw new Error("nager.date fetch Error");
+    throw await HttpError.fromResponse(response);
   }
 
   return await response.json();
