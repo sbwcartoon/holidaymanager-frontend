@@ -24,14 +24,14 @@ interface Props {
 }
 
 export default async function CountryHolidaysPage({params, searchParams}: Props) {
-  const countryCode = params.countryCode;
-  const year = Number(params.year);
+  const countryCode = (await params).countryCode;
+  const year = Number((await params).year);
 
-  const page: number = Number(searchParams.page) || 1;
-  const size: number = Number(searchParams.size) || 10;
-  const from: number = Number(searchParams.from) || 1;
-  const to: number = Number(searchParams.to) || 12;
-  const typesParam: string | string[] = searchParams.types ?? getAllTypes();
+  const page: number = Number((await searchParams).page) || 1;
+  const size: number = Number((await searchParams).size) || 10;
+  const from: number = Number((await searchParams).from) || 1;
+  const to: number = Number((await searchParams).to) || 12;
+  const typesParam: string | string[] = (await searchParams).types ?? getAllTypes();
   const types: string[] = typeof typesParam === "string" ? [typesParam] : typesParam;
 
   const country = (await getCountries()).find((c) => c.countryCode === countryCode);
