@@ -18,7 +18,7 @@ export default async function CountryHolidaysPage({params}: Props) {
   const countryCode = params.countryCode;
   const year = Number(params.year);
 
-  const country = getCountries().find((c) => c.countryCode === countryCode);
+  const country = (await getCountries()).find((c) => c.countryCode === countryCode);
   const holidays = await getHolidays(year, countryCode);
 
   if (!country) {

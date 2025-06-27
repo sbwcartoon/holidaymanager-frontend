@@ -1,12 +1,16 @@
 import path from "path";
 import {CountryHoliday} from "@/lib/types/CountryHoliday";
 import {readFile, writeFile} from "node:fs/promises";
+import {Country} from "@/lib/types/Country";
 
-export function getCountries() {
-  return [
-    {countryCode: "KR", name: "Korea"},
-    {countryCode: "US", name: "USA"},
-  ];
+export async function getCountries(): Promise<Country[]> {
+  const response = await fetch("https://date.nager.at/api/v3/AvailableCountries");
+
+  if (!response.ok) {
+    throw new Error("nager.date fetch Error");
+  }
+
+  return await response.json();
 }
 
 const filePath = path.join(process.cwd(), "src", "data", "holiday-db.json");
