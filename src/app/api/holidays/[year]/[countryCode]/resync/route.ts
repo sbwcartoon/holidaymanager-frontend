@@ -1,8 +1,11 @@
-import {NextRequest, NextResponse} from "next/server";
+import {NextRequest} from "next/server";
 
 export async function POST(
   _: NextRequest,
   {params}: { params: { year: string; countryCode: string } },
 ) {
-  return NextResponse.json({error: "재동기화에 실패했습니다."}, {status: 500});
+  const {year, countryCode} = params;
+  return await fetch(`http://localhost:8080/api/holidays/${year}/${countryCode}/refresh`, {
+    method: "POST",
+  });
 }
