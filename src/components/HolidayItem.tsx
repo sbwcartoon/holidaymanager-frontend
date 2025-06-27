@@ -13,7 +13,7 @@ export const HolidayItem = ({holiday}: Props) => {
       <span>{localName}</span>
       <span>{name}</span>
       <span>{launchYear ?? "-"}</span>
-      <span>{counties.length > 0 ? counties : "-"}</span>
+      <span>{counties.length > 0 ? counties.join(", ") : "-"}</span>
       <span>{types.join(", ")}</span>
     </li>
   )
