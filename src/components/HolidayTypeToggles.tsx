@@ -33,7 +33,7 @@ export function HolidayTypeToggles({from, to, types}: Props) {
         {getAllTypes().map((type: string) =>
           <ToggleGroupItem
             size="sm"
-            className="w-[100px] cursor-pointer text-xs"
+            className="w-[100px] cursor-pointer text-xs text-muted-foreground"
             value={type}
             key={type}
           >

@@ -54,7 +54,7 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
             <CursoredButton className="cursor-pointer" variant="secondary">Back to Home</CursoredButton>
           </Link>
           <div className="flex gap-2">
-            {holidays.length > 0 ? <DeleteHolidaysButton year={year} countryCode={countryCode}/> : null}
+            <DeleteHolidaysButton year={year} countryCode={countryCode}/>
             <ResyncHolidaysButton year={year} countryCode={countryCode}/>
             <DateSelect
               selectedYear={year}
@@ -71,7 +71,7 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
         />
       </div>
 
-      <ul className="bg-muted p-4 rounded-lg shadow divide-y">
+      <ul className="bg-muted px-4 py-2 rounded-lg shadow divide-y">
         {holidays.length > 0 ? (holidays.map((holiday: CountryHoliday, i: number) => (
           <HolidayItem holiday={holiday} key={i}/>
         ))) : (
@@ -83,6 +83,7 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
         {Array.from({length: totalPages}, (_, i) => (
           <Link href={`/holidays/${year}/${countryCode}?page=${i + 1}&size=${size}&from=${from}&to=${to}${types.map((type: string) => `&types=${type}`).join("")}`} key={i}>
             <CursoredButton
+              className="text-zinc-600"
               size="sm"
               variant={page === i + 1 ? "secondary" : "ghost"}
             >{i + 1}</CursoredButton>
