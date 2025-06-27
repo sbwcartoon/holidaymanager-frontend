@@ -8,7 +8,7 @@ interface Props {
 export function FromMonthSelect({from, onChange}: Props) {
   return (
     <Select
-      defaultValue={String(from)}
+      value={String(from)}
       onValueChange={(value) => onChange(Number(value))}
     >
       <SelectTrigger className="cursor-pointer w-[110px]">

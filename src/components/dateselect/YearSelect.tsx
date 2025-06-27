@@ -11,7 +11,7 @@ export function YearSelect({year, onChange}: Props) {
 
   return (
     <Select
-      defaultValue={String(year)}
+      value={String(year)}
       onValueChange={(value) => onChange(Number(value))}
     >
       <SelectTrigger className="cursor-pointer w-[110px]">
