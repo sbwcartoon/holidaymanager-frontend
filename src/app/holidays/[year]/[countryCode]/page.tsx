@@ -1,13 +1,10 @@
 import {getCountries, getHolidays} from "@/lib/api";
-import {HolidayItem} from "@/components/HolidayItem";
-import Link from "next/link";
 import {CountryHoliday} from "@/lib/types/CountryHoliday";
-import {DeleteHolidaysButton} from "@/components/DeleteHolidaysButton";
-import {ResyncHolidaysButton} from "@/components/ResyncHolidaysButton";
-import {DateSelect} from "@/components/dateselect/DateSelect";
-import {CursoredButton} from "@/components/CursoredButton";
 import {getAllTypes} from "@/lib/utils";
-import {HolidayTypeToggles} from "@/components/HolidayTypeToggles";
+import HolidayListBody from "@/components/holidaylist/HolidayListBody";
+import HolidayListEmpty from "@/components/holidaylist/HolidayListEmpty";
+import HolidayListPagination from "@/components/holidaylist/HolidayListPagination";
+import HolidayListHeader from "@/components/holidaylist/HolidayListHeader";
 
 interface Props {
   params: {
@@ -41,68 +38,30 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
   const totalPages: number = pageResponse.totalPages;
 
   if (!country) {
-    return <p className="text-center py-16">Invalid country code</p>;
+    return <HolidayListEmpty>Invalid country code</HolidayListEmpty>;
   }
 
   return (
     <>
       <h1 className="text-2xl font-bold py-5">{country.name} Holidays 🥰</h1>
-
-      <div className="py-4 space-y-2.5">
-        <div className="flex justify-between items-center">
-          <Link href="/">
-            <CursoredButton className="cursor-pointer" variant="default">← Home</CursoredButton>
-          </Link>
-          <div className="flex gap-6">
-            <div className="flex gap-2">
-              <DeleteHolidaysButton year={year} countryCode={countryCode}/>
-              <ResyncHolidaysButton year={year} countryCode={countryCode}/>
-            </div>
-            <DateSelect
-              selectedYear={year}
-              selectedMonthFrom={from}
-              selectedMonthTo={to}
-              countryCode={countryCode}
-              types={types}
-            />
-          </div>
-        </div>
-        <HolidayTypeToggles
-          from={from}
-          to={to}
-          types={types}
-        />
-      </div>
-
-      <ul className="bg-white px-4 py-2 border border-zinc-300 rounded-lg shadow divide-y">
-        {holidays.length > 0 ? (
-          <li className="grid grid-cols-5 gap-8 py-2.5 text-zinc-800 text-sm border-b border-zinc-300">
-            <span className="font-medium">Date</span>
-            <span className="font-medium">Local Name</span>
-            <span className="font-medium">Name</span>
-            <span className="font-medium">Counties</span>
-            <span className="font-medium">Types</span>
-          </li>
-        ) : null}
-
-        {holidays.length > 0 ? (holidays.map((holiday: CountryHoliday, i: number) => (
-          <HolidayItem holiday={holiday} key={i}/>
-        ))) : (
-          <p className="text-center py-16">데이터가 존재하지 않습니다.<br/>↻ Resync 버튼을 누르면 데이터가 생길지도..?</p>
-        )}
-      </ul>
-
-      <nav className="flex justify-center py-5 space-x-1">
-        {Array.from({length: totalPages}, (_, i) => (
-          <Link href={`/holidays/${year}/${countryCode}?page=${i + 1}&size=${size}&from=${from}&to=${to}${types.map((type: string) => `&types=${type}`).join("")}`} key={i}>
-            <CursoredButton
-              className="text-zinc-600"
-              size="sm"
-              variant={page === i + 1 ? "secondary" : "ghost"}
-            >{i + 1}</CursoredButton>
-          </Link>
-        ))}
-      </nav>
+      <HolidayListHeader
+        year={year}
+        countryCode={countryCode}
+        from={from}
+        to={to}
+        types={types}
+      />
+      <HolidayListBody holidays={holidays}/>
+      <HolidayListPagination
+        totalPages={totalPages}
+        year={year}
+        countryCode={countryCode}
+        page={page}
+        size={size}
+        from={from}
+        to={to}
+        types={types}
+      />
     </>
   );
 }
