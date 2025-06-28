@@ -7,17 +7,17 @@ import HolidayListPagination from "@/components/holidaylist/HolidayListPaginatio
 import HolidayListHeader from "@/components/holidaylist/HolidayListHeader";
 
 interface Props {
-  params: {
+  params: Promise<{
     year: string;
     countryCode: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     page?: number;
     size?: number;
     from?: number;
     to?: number;
     types?: string | string[];
-  };
+  }>;
 }
 
 export default async function CountryHolidaysPage({params, searchParams}: Props) {

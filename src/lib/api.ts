@@ -3,6 +3,8 @@ import {HttpError} from "@/lib/exception/HttpError";
 import {PageResponse} from "@/lib/types/PageResponse";
 import {getAllTypes} from "@/lib/utils";
 
+const API_HOST_URL = process.env.API_HOST_URL;
+
 export async function getCountries(): Promise<Country[]> {
   const response = await fetch("https://date.nager.at/api/v3/AvailableCountries", {
     next: {
@@ -25,7 +27,7 @@ export async function getHolidays(year: number, countryCode: string, page: numbe
   params.searchParams.set("to", String(to));
   params.searchParams.set("types", types.join(','));
 
-  const response = await fetch(`http://localhost:8080/api/holidays/${year}/${countryCode}${params.search}`);
+  const response = await fetch(`${API_HOST_URL}/api/holidays/${year}/${countryCode}${params.search}`);
 
   if (!response.ok) {
     throw await HttpError.fromResponse(response);

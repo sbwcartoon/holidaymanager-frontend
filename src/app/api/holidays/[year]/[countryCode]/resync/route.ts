@@ -1,11 +1,13 @@
 import {NextRequest} from "next/server";
 
+const API_HOST_URL = process.env.API_HOST_URL;
+
 export async function POST(
   _: NextRequest,
-  {params}: { params: { year: string; countryCode: string } },
+  {params}: { params: Promise<{ year: string, countryCode: string }> }
 ) {
-  const {year, countryCode} = params;
-  return await fetch(`http://localhost:8080/api/holidays/${year}/${countryCode}/refresh`, {
+  const {year, countryCode} = await params;
+  return await fetch(`${API_HOST_URL}/api/holidays/${year}/${countryCode}/refresh`, {
     method: "POST",
   });
 }
