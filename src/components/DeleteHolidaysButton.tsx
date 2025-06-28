@@ -2,6 +2,7 @@
 
 import {CursoredButton} from "@/components/CursoredButton";
 import {useRouter} from "next/navigation";
+import {HttpError} from "@/lib/exception/HttpError";
 
 interface Props {
   year: number;
@@ -26,7 +27,7 @@ export function DeleteHolidaysButton({year, countryCode}: Props) {
 
     if (!response.ok) {
       alert("오류가 발생했습니다. 문제가 지속될 시 관리자에게 문의해주세요.");
-      throw new Error("데이터 삭제 오류");
+      throw await HttpError.fromResponse(response);
     }
 
     alert("삭제되었습니다.");

@@ -2,6 +2,7 @@
 
 import {useRouter} from "next/navigation";
 import {CursoredButton} from "@/components/CursoredButton";
+import {HttpError} from "@/lib/exception/HttpError";
 
 interface Props {
   year: number;
@@ -26,7 +27,7 @@ export function ResyncHolidaysButton({year, countryCode}: Props) {
 
     if (!response.ok) {
       alert("오류가 발생했습니다. 문제가 지속될 시 관리자에게 문의해주세요.");
-      throw new Error("데이터 재동기화 오류");
+      throw await HttpError.fromResponse(response);
     }
 
     alert("다시 설정되었습니다.");
