@@ -37,6 +37,6 @@ export function DeleteHolidaysButton({year, countryCode}: Props) {
     <CursoredButton
       variant="destructive"
       onClick={handleDelete}
-    >Delete</CursoredButton>
+    >✕ Delete</CursoredButton>
   );
 }

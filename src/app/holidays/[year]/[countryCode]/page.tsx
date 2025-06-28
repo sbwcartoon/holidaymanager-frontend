@@ -51,11 +51,13 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
       <div className="py-4 space-y-2.5">
         <div className="flex justify-between items-center">
           <Link href="/">
-            <CursoredButton className="cursor-pointer" variant="secondary">Back to Home</CursoredButton>
+            <CursoredButton className="cursor-pointer" variant="default">← Home</CursoredButton>
           </Link>
-          <div className="flex gap-2">
-            <DeleteHolidaysButton year={year} countryCode={countryCode}/>
-            <ResyncHolidaysButton year={year} countryCode={countryCode}/>
+          <div className="flex gap-6">
+            <div className="flex gap-2">
+              <DeleteHolidaysButton year={year} countryCode={countryCode}/>
+              <ResyncHolidaysButton year={year} countryCode={countryCode}/>
+            </div>
             <DateSelect
               selectedYear={year}
               selectedMonthFrom={from}
@@ -72,11 +74,21 @@ export default async function CountryHolidaysPage({params, searchParams}: Props)
         />
       </div>
 
-      <ul className="bg-muted px-4 py-2 rounded-lg shadow divide-y">
+      <ul className="bg-white px-4 py-2 border border-zinc-300 rounded-lg shadow divide-y">
+        {holidays.length > 0 ? (
+          <li className="grid grid-cols-5 gap-8 py-2.5 text-zinc-800 text-sm border-b border-zinc-300">
+            <span className="font-medium">Date</span>
+            <span className="font-medium">Local Name</span>
+            <span className="font-medium">Name</span>
+            <span className="font-medium">Counties</span>
+            <span className="font-medium">Types</span>
+          </li>
+        ) : null}
+
         {holidays.length > 0 ? (holidays.map((holiday: CountryHoliday, i: number) => (
           <HolidayItem holiday={holiday} key={i}/>
         ))) : (
-          <p className="text-center py-16">데이터가 존재하지 않습니다.<br/>Resync 버튼을 누르면 데이터가 생길지도..?</p>
+          <p className="text-center py-16">데이터가 존재하지 않습니다.<br/>↻ Resync 버튼을 누르면 데이터가 생길지도..?</p>
         )}
       </ul>
 

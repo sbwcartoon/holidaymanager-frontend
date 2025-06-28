@@ -23,7 +23,7 @@ export function HolidayTypeToggles({from, to, types}: Props) {
   }
 
   return (
-    <div className="flex justify-end items-center space-x-1">
+    <div className="flex justify-end">
       <ToggleGroup
         type="multiple"
         variant="outline"
@@ -33,7 +33,7 @@ export function HolidayTypeToggles({from, to, types}: Props) {
         {getAllTypes().map((type: string) =>
           <ToggleGroupItem
             size="sm"
-            className="w-[100px] cursor-pointer text-xs text-muted-foreground"
+            className="w-[100px] cursor-pointer text-xs text-muted-foreground italic"
             value={type}
             key={type}
           >

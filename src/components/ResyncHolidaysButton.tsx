@@ -35,8 +35,9 @@ export function ResyncHolidaysButton({year, countryCode}: Props) {
 
   return (
     <CursoredButton
-      variant="outline"
+      variant="default"
+      className="bg-blue-600 hover:bg-blue-700 text-white"
       onClick={handleResync}
-    >Resync</CursoredButton>
+    >↻ Resync</CursoredButton>
   );
 }
